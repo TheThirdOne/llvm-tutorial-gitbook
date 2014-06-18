@@ -1,14 +1,12 @@
 Code Generation to LLVM IR
 ==========================
 
-#3.1 Chapter 3 Introduction
-
 Welcome to Chapter 3 of the "Implementing a language with LLVM" tutorial. This chapter shows you how to transform the Abstract Syntax Tree, built in Chapter 2, into LLVM IR. This will teach you a little bit about how LLVM does things, as well as demonstrate how easy it is to use. It's much more work to build a lexer and parser than it is to generate LLVM IR code. :)
 
 Please note: the code in this chapter and later require LLVM 2.2 or later. LLVM 2.1 and before will not work with it. Also note that you need to use a version of this tutorial that matches your LLVM release: If you are using an official LLVM release, use the version of the documentation included with your release or on the llvm.org releases page.
 
 
-#3.2 Code Generation Setup
+#3.1 Code Generation Setup
 
 In order to generate LLVM IR, we want some simple setup to get started. First we define virtual code generation (codegen) methods in each AST class:
 
@@ -53,7 +51,7 @@ The NamedValues map keeps track of which values are defined in the current scope
 With these basics in place, we can start talking about how to generate code for each expression. Note that this assumes that the Builder has been set up to generate code into something. For now, we'll assume that this has already been done, and we'll just use it to emit code.
 
 
-#3.3 Expression Code Generation
+#3.2 Expression Code Generation
 
 Generating LLVM code for expression nodes is very straightforward: less than 45 lines of commented code for all four of our expression nodes. First we'll do numeric literals:
 
@@ -133,7 +131,7 @@ Once we have the function to call, we recursively codegen each argument that is 
 This wraps up our handling of the four basic expressions that we have so far in Kaleidoscope. Feel free to go in and add some more. For example, by browsing the LLVM language reference you'll find several other interesting instructions that are really easy to plug into our basic framework.
 
 
-#3.4. Function Code Generation
+#3.3 Function Code Generation
 
 Code generation for prototypes and functions must handle a number of details, which make their code less beautiful than expression code generation, but allows us to illustrate some important points. First, lets talk about code generation for prototypes: they are used both for function bodies and external function declarations. The code starts with:
 
@@ -255,7 +253,7 @@ def bar() foo(1, 2); # error, unknown function "foo"
 ```
 
 
-#3.5 Driver Changes and Closing Thoughts
+#3.4 Driver Changes and Closing Thoughts
 
 For now, code generation to LLVM doesn't really get us much, except that we can look at the pretty IR calls. The sample code inserts calls to Codegen into the `HandleDefinition`, `HandleExtern` etc functions, and then dumps out the LLVM IR. This gives a nice way to look at the LLVM IR for simple functions. For example:
 

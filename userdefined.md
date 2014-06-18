@@ -1,14 +1,13 @@
 User-defined Operations
 =======================
 
-#6.1 Chapter 6 Introduction
 Welcome to Chapter 6 of the “Implementing a language with LLVM” tutorial. At this point in our tutorial, we now have a fully functional language that is fairly minimal, but also useful. There is still one big problem with it, however. Our language doesn’t have many useful operators (like division, logical negation, or even any comparisons besides less-than).
 
 This chapter of the tutorial takes a wild digression into adding user-defined operators to the simple and beautiful Kaleidoscope language. This digression now gives us a simple and ugly language in some ways, but also a powerful one at the same time. One of the great things about creating your own language is that you get to decide what is good or bad. In this tutorial we’ll assume that it is okay to use this as a way to show some interesting parsing techniques.
 
 At the end of this tutorial, we’ll run through an example Kaleidoscope application that renders the Mandelbrot set. This gives an example of what you can build with Kaleidoscope and its feature set.
 
-#6.2 User-defined Operators: the Idea
+#6.1 User-defined Operators: the Idea
 The “operator overloading” that we will add to Kaleidoscope is more general than languages like C++. In C++, you are only allowed to redefine existing operators: you can’t programatically change the grammar, introduce new operators, change precedence levels, etc. In this chapter, we will add this capability to Kaleidoscope, which will let the user round out the set of operators that are supported.
 
 The point of going into user-defined operators in a tutorial like this is to show the power and flexibility of using a hand-written parser. Thus far, the parser we have been implementing uses recursive descent for most parts of the grammar and operator precedence parsing for the expressions. See Chapter 2 for details. Without using operator precedence parsing, it would be very difficult to allow the programmer to introduce new operators into the grammar: the grammar is dynamically extensible as the JIT runs.
@@ -45,7 +44,7 @@ Many languages aspire to being able to implement their standard runtime library 
 
 We will break down implementation of these features into two parts: implementing support for user-defined binary operators and adding unary operators.
 
-#6.3 User-defined Binary Operators
+#6.2 User-defined Binary Operators
 
 Adding support for user-defined binary operators is pretty simple with our current framework. We’ll first add support for the unary/binary keywords:
 
@@ -215,7 +214,7 @@ Basically, before codegening a function, if it is a user-defined operator, we re
 Now we have useful user-defined binary operators. This builds a lot on the previous framework we built for other operators. Adding unary operators is a bit more challenging, because we don’t have any framework for it yet - lets see what it takes.
 
 
-#6.4 User-defined Unary Operators
+#6.3 User-defined Unary Operators
 
 Since we don’t currently support unary operators in the Kaleidoscope language, we’ll need to add everything to support them. Above, we added simple support for the ‘unary’ keyword to the lexer. In addition to that, we need an AST node:
 
@@ -328,7 +327,7 @@ Value *UnaryExprAST::Codegen() {
 This code is similar to, but simpler than, the code for binary operators. It is simpler primarily because it doesn’t need to handle any predefined operators.
 
 
-#6.5 Kicking the Tires
+#6.4 Kicking the Tires
 
 It is somewhat hard to believe, but with a few simple extensions we’ve covered in the last chapters, we have grown a real-ish language. With this, we can do a lot of interesting things, including I/O, math, and a bunch of other things. For example, we can now add a nice sequencing operator (printd is defined to print out the specified value and a newline):
 

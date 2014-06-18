@@ -1,11 +1,9 @@
 Adding JIT and Optimizer Support
 ================================
 
-#4.1 Chapter 4 Introduction
-
 Welcome to Chapter 4 of the "Implementing a language with LLVM" tutorial. Chapters 1-3 described the implementation of a simple language and added support for generating LLVM IR. This chapter describes two new techniques: adding optimizer support to your language, and adding JIT compiler support. These additions will demonstrate how to get nice, efficient code for the Kaleidoscope language.
 
-#4.2 Trivial Constant Folding
+#4.1 Trivial Constant Folding
 
 Our demonstration for Chapter 3 is elegant and easy to extend. Unfortunately, it does not produce wonderful code. The IRBuilder, however, does give us obvious optimizations when compiling simple code:
 
@@ -57,7 +55,7 @@ In this case, the LHS and RHS of the multiplication are the same value. We'd rea
 Unfortunately, no amount of local analysis will be able to detect and correct this. This requires two transformations: reassociation of expressions (to make the add's lexically identical) and Common Subexpression Elimination (CSE) to delete the redundant add instruction. Fortunately, LLVM provides a broad range of optimizations that you can use, in the form of "passes".
 
 
-#4.3 LLVM Optimization Passes
+#4.2 LLVM Optimization Passes
 
 LLVM provides many optimization passes, which do many different sorts of things and have different tradeoffs. Unlike other systems, LLVM doesn't hold to the mistaken notion that one set of optimizations is right for all languages and for all situations. LLVM allows a compiler implementor to make complete decisions about what optimizations to use, in which order, and in what situation.
 
@@ -134,7 +132,7 @@ LLVM provides a wide variety of optimizations that can be used in certain circum
 Now that we have reasonable code coming out of our front-end, lets talk about executing it!
 
 
-#4.4 Adding a JIT Compiler
+#4.3 Adding a JIT Compiler
 
 Code that is available in LLVM IR can have a wide variety of tools applied to it. For example, you can run optimizations on it (as we did above), you can dump it out in textual or binary forms, you can compile the code to an assembly file (.s) for some target, or you can JIT compile it. The nice thing about the LLVM IR representation is that it is the "common currency" between many different parts of the compiler.
 

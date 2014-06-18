@@ -1,12 +1,10 @@
 Control Flow
 ============
 
-#5.1 Chapter 5 Introduction
-
 Welcome to Chapter 5 of the "Implementing a language with LLVM" tutorial. Parts 1-4 described the implementation of the simple Kaleidoscope language and included support for generating LLVM IR, followed by optimizations and a JIT compiler. Unfortunately, as presented, Kaleidoscope is mostly useless: it has no control flow other than call and return. This means that you can't have conditional branches in the code, significantly limiting its power. In this episode of "build that compiler", we'll extend Kaleidoscope to have an if/then/else expression plus a simple `for` loop.
 
 
-#5.2 If/Then/Else
+#5.1 If/Then/Else
 
 Extending Kaleidoscope to support if/then/else is quite straightforward. It basically requires adding support for this "new" concept to the lexer, parser, AST, and LLVM code emitter. This example is nice, because it shows how easy it is to "grow" a language over time, incrementally extending it as new ideas are discovered.
 
@@ -27,7 +25,7 @@ The semantics of the if/then/else expression is that it evaluates the condition 
 Now that we know what we "want", lets break this down into its constituent pieces.
 
 
-#5.2.1 Lexer Extensions for If/Then/Else
+#5.1.1 Lexer Extensions for If/Then/Else
 
 The lexer extensions are straightforward. First we add new enum values for the relevant tokens:
 
@@ -46,7 +44,7 @@ return tok_identifier;
 ```
 
 
-5.2.2 AST Extensions for If/Then/Else
+#5.1.2 AST Extensions for If/Then/Else
 
 To represent the new expression we add a new AST node for it:
 
@@ -64,7 +62,7 @@ public:
 The AST node just has pointers to the various subexpressions.
 
 
-#5.2.3 Parser Extensions for If/Then/Else
+#5.1.3 Parser Extensions for If/Then/Else
 
 Now that we have the relevant tokens coming from the lexer and we have the AST node to build, our parsing logic is relatively straightforward. First we define a new parsing function:
 
@@ -110,7 +108,7 @@ static ExprAST *ParsePrimary() {
 }
 ```
 
-#5.2.4 LLVM IR for If/Then/Else
+#5.1.4 LLVM IR for If/Then/Else
 
 Now that we have it parsing and building the AST, the final piece is adding LLVM code generation support. This is the most interesting part of the if/then/else example, because this is where it starts to introduce new concepts. All of the code above has been thoroughly described in previous chapters.
 
@@ -172,7 +170,7 @@ In Chapter 7 of this tutorial ("mutable variables"), we'll talk about #1 in dept
 Okay, enough of the motivation and overview, lets generate code!
 
 
-#.2.5 Code Generation for If/Then/Else
+#5.1.5 Code Generation for If/Then/Else
 
 In order to generate code for this, we implement the Codegen method for IfExprAST:
 
@@ -254,7 +252,7 @@ Finally, the CodeGen function returns the phi node as the value computed by the 
 Overall, we now have the ability to execute conditional code in Kaleidoscope. With this extension, Kaleidoscope is a fairly complete language that can calculate a wide variety of numeric functions. Next up we'll add another useful expression that is familiar from non-functional languages...
 
 
-#5.3 `for` Loop Expression
+#5.2 `for` Loop Expression
 
 Now that we know how to add basic control flow constructs to the language, we have the tools to add more powerful things. Lets add something more aggressive, a `for` expression:
 
@@ -273,7 +271,7 @@ This expression defines a new variable (`i` in this case) which iterates from a 
 As before, lets talk about the changes that we need to Kaleidoscope to support this.
 
 
-#5.3.1 Lexer Extensions for the `for` Loop
+#5.2.1 Lexer Extensions for the `for` Loop
 
 The lexer extensions are the same sort of thing as for if/then/else:
 
@@ -295,7 +293,7 @@ return tok_identifier;
 ```
 
 
-#5.3.2 AST Extensions for the `for` Loop
+#5.2.2 AST Extensions for the `for` Loop
 
 The AST node is just as simple. It basically boils down to capturing the variable name and the constituent expressions in the node.
 
@@ -312,7 +310,7 @@ public:
 };
 ```
 
-#5.3.3 Parser Extensions for the `for` Loop
+#5.2.3 Parser Extensions for the `for` Loop
 
 The parser code is also fairly standard. The only interesting thing here is handling of the optional step value. The parser code handles it by checking to see if the second comma is present. If not, it sets the step value to null in the AST node:
 
@@ -361,7 +359,7 @@ static ExprAST *ParseForExpr() {
 ```
 
 
-#5.3.4 LLVM IR for the `for` Loop
+#5.2.4 LLVM IR for the `for` Loop
 
 Now we get to the good part: the LLVM IR we want to generate for this thing. With the simple example above, we get this LLVM IR (note that this dump is generated with optimizations disabled for clarity):
 
@@ -394,7 +392,7 @@ afterloop:      ; preds = %loop
 This loop contains all the same constructs we saw before: a phi node, several expressions, and some basic blocks. Lets see how this fits together.
 
 
-#5.3.5 Code Generation for the `for` Loop
+#5.2.5 Code Generation for the `for` Loop
 
 The first part of Codegen is very simple: we just output the start expression for the loop value:
 
