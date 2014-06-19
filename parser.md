@@ -1,4 +1,4 @@
-mplementing a Parser and AST
+Implementing a Parser and AST
 =============================
 
 Welcome to Chapter 2 of the "Implementing a language with LLVM" tutorial. This chapter shows you how to use the lexer, built in Chapter 1, to build a full parser for our Kaleidoscope language. Once we have a parser, we'll define and build an Abstract Syntax Tree (AST).
